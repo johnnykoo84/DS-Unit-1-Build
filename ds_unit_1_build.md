@@ -1,8 +1,27 @@
-# DS Unit 01 Build
-## DSPT5 Ilmo Koo
+# How are Coding Bootcamp graduates valued in the field?
+There are many arguments whether or not coding boocamps are worth it.
+People debate a lot in the communities <a href="https://www.reddit.com/r/webdev/comments/6tcnt9/are_coding_bootcamps_worth_the_time_and_money/" target="_blank">reddit discussion link</a>  and it is hot issue among those who want to start their new professional software engineering career. 
 
+I can talk about pros and cons of going to bootcamp here, but I won't do it because there are already <a href="https://careerkarma.com/blog/are-coding-bootcamps-worth-it/" target="_blank">many discussion out there</a>. 
 
-Dataset: Stack Overflow Developer Survey Results 2019
+In this article, I would instead talk about how much coding boocamp are valued in the field based on <a href="https://www.kaggle.com/mchirico/stack-overflow-developer-survey-results-2019" target="_blank">stackoverflow survey 2019</a> data.
+
+There are some assumptions that I have to tell you. 
+
+1. Not all coding bootcamp graduates probably got their job 100%, so this analysis would be fully based on those survey results by whom I belive that they got their job. Therefore, my argument is not focused on "Can you get a job through coding bootcamp?'.
+
+2. There are no specific educational backgroudn group with labed as 'coding bootcamp' but there is one like 'Participated in a full-time developer training program or bootcamp'. Therefore I would like to consider the group as 'coding bootcamp' group since 9 years ago because wikipedia says the very first bootcamp was in 2001 in U.S.
+3. I restricted the region to U.S. becasue the compensation is relative all over the world and did not want to go into market and exchange rate issue. 
+
+## My Hypothesis
+The bootcamp graduates are valued as equal as B.S. degree in Computer Science in the field
+
+## Steps to validate my Hypothesis
+1. EDA: let's explore the data
+2. visualize data
+3. analyze and see if my hypothesis is correct
+
+## Step 1: EDA
 
 
 ```python
@@ -16,13 +35,15 @@ import seaborn as sns
 
 ```python
 # Plotly imports
-import plotly
+import plotly as py
 import plotly.graph_objs as go
 import plotly.express as px
 ```
 
 
 ```python
+# original survey_data_2019.csv file size was 150Mb
+# had to compress the size down to 50Mb with pickle format
 df = pd.read_pickle('./survey_data_2019.pkl')
 df_sch = pd.read_csv('./survey_results_schema.csv')
 ```
@@ -204,32 +225,23 @@ df.head()
 
 
 
+The shape of the data is 88883 x 85
+
 
 ```python
-df.iloc[0]
+df.shape
 ```
 
 
 
 
-    Respondent                                                      1
-    MainBranch                 I am a student who is learning to code
-    Hobbyist                                                      Yes
-    OpenSourcer                                                 Never
-    OpenSource      The quality of OSS and closed source software ...
-                                          ...                        
-    Sexuality                                 Straight / Heterosexual
-    Ethnicity                                                     NaN
-    Dependents                                                     No
-    SurveyLength                                Appropriate in length
-    SurveyEase                             Neither easy nor difficult
-    Name: 0, Length: 85, dtype: object
+    (88883, 85)
 
 
 
 
 ```python
-# let's see what each column means
+# let's see what each column survey question asks
 pd.set_option('display.max_rows', df_sch.shape[0]+1)
 print(df_sch)
 ```
@@ -322,160 +334,11 @@ print(df_sch)
     84              SurveyEase  How easy or difficult was this survey to compl...
 
 
-# choice and concentration
-There are 85 columns and it is necessary to focus a few of them
-I might add and analyze more data, but for now let's pick maybe a couple
-Let's keep it simple (LEAN)
-
-## Prior to EDA
-There are a few assumptions/stoires that I want to validate from the data. 
-I am not sure which to pick and analyze but let's brainstrom them first.
-
-1. Are bootcamp graduates doing well in the field?
-2. B.S or higher of C.S. degree really matter in terms of salary?
-3. 
-
 # 
 
 
 ```python
-df.shape
-```
-
-
-
-
-    (88883, 85)
-
-
-
-
-```python
-df_sch.shape
-```
-
-
-
-
-    (85, 2)
-
-
-
-
-```python
-df.describe()
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Respondent</th>
-      <th>CompTotal</th>
-      <th>ConvertedComp</th>
-      <th>WorkWeekHrs</th>
-      <th>CodeRevHrs</th>
-      <th>Age</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>count</td>
-      <td>88883.000000</td>
-      <td>5.594500e+04</td>
-      <td>5.582300e+04</td>
-      <td>64503.000000</td>
-      <td>49790.000000</td>
-      <td>79210.000000</td>
-    </tr>
-    <tr>
-      <td>mean</td>
-      <td>44442.000000</td>
-      <td>5.519014e+11</td>
-      <td>1.271107e+05</td>
-      <td>42.127197</td>
-      <td>5.084308</td>
-      <td>30.336699</td>
-    </tr>
-    <tr>
-      <td>std</td>
-      <td>25658.456325</td>
-      <td>7.331926e+13</td>
-      <td>2.841523e+05</td>
-      <td>37.287610</td>
-      <td>5.513931</td>
-      <td>9.178390</td>
-    </tr>
-    <tr>
-      <td>min</td>
-      <td>1.000000</td>
-      <td>0.000000e+00</td>
-      <td>0.000000e+00</td>
-      <td>1.000000</td>
-      <td>0.000000</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <td>25%</td>
-      <td>22221.500000</td>
-      <td>2.000000e+04</td>
-      <td>2.577750e+04</td>
-      <td>40.000000</td>
-      <td>2.000000</td>
-      <td>24.000000</td>
-    </tr>
-    <tr>
-      <td>50%</td>
-      <td>44442.000000</td>
-      <td>6.200000e+04</td>
-      <td>5.728700e+04</td>
-      <td>40.000000</td>
-      <td>4.000000</td>
-      <td>29.000000</td>
-    </tr>
-    <tr>
-      <td>75%</td>
-      <td>66662.500000</td>
-      <td>1.200000e+05</td>
-      <td>1.000000e+05</td>
-      <td>44.750000</td>
-      <td>6.000000</td>
-      <td>35.000000</td>
-    </tr>
-    <tr>
-      <td>max</td>
-      <td>88883.000000</td>
-      <td>1.000000e+16</td>
-      <td>2.000000e+06</td>
-      <td>4850.000000</td>
-      <td>99.000000</td>
-      <td>99.000000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-
-```python
+# types of each column
 df.dtypes
 ```
 
@@ -573,8 +436,8 @@ df.dtypes
 
 
 ```python
+# what are the numeric answers?
 df.select_dtypes(include=np.number).columns.tolist()
-
 ```
 
 
@@ -591,6 +454,7 @@ df.select_dtypes(include=np.number).columns.tolist()
 
 
 ```python
+# Are there null values?
 df.isna().sum()
 ```
 
@@ -690,11 +554,9 @@ df.isna().sum()
 ```python
 # let's see if I can filter out non-numeric columns from df
 df_obj = df.select_dtypes(['object'])
-print(df_obj.shape)
 print(df_obj.dtypes)
 ```
 
-    (88883, 79)
     MainBranch                object
     Hobbyist                  object
     OpenSourcer               object
@@ -795,420 +657,16 @@ print(df_num.dtypes)
     dtype: object
 
 
+## Startegy
+In order to validate my hypothesis, I would like to compare Salaries for two different gropus. 
+1. B.S. degree in Computer Science or similar computer related study
+2. Coding Bootcamp graduates
 
-```python
-df_num_corr = df_num.corr()
-df_num_corr
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Respondent</th>
-      <th>CompTotal</th>
-      <th>ConvertedComp</th>
-      <th>WorkWeekHrs</th>
-      <th>CodeRevHrs</th>
-      <th>Age</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Respondent</td>
-      <td>1.000000</td>
-      <td>-0.003357</td>
-      <td>0.002930</td>
-      <td>-0.004589</td>
-      <td>-0.005240</td>
-      <td>-0.001829</td>
-    </tr>
-    <tr>
-      <td>CompTotal</td>
-      <td>-0.003357</td>
-      <td>1.000000</td>
-      <td>0.039725</td>
-      <td>0.003074</td>
-      <td>0.061090</td>
-      <td>0.016500</td>
-    </tr>
-    <tr>
-      <td>ConvertedComp</td>
-      <td>0.002930</td>
-      <td>0.039725</td>
-      <td>1.000000</td>
-      <td>0.013908</td>
-      <td>-0.021261</td>
-      <td>0.108268</td>
-    </tr>
-    <tr>
-      <td>WorkWeekHrs</td>
-      <td>-0.004589</td>
-      <td>0.003074</td>
-      <td>0.013908</td>
-      <td>1.000000</td>
-      <td>0.021092</td>
-      <td>0.019976</td>
-    </tr>
-    <tr>
-      <td>CodeRevHrs</td>
-      <td>-0.005240</td>
-      <td>0.061090</td>
-      <td>-0.021261</td>
-      <td>0.021092</td>
-      <td>1.000000</td>
-      <td>-0.022486</td>
-    </tr>
-    <tr>
-      <td>Age</td>
-      <td>-0.001829</td>
-      <td>0.016500</td>
-      <td>0.108268</td>
-      <td>0.019976</td>
-      <td>-0.022486</td>
-      <td>1.000000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
+Stackoverflow gives two columns, one with 'EdLevel' where I can figure who got B.S. degree in computer science or similar. 
 
 
 ```python
-sns.heatmap(df_num_corr,
-cmap='RdBu_r',
-annot=True,
-linewidth=0.5)
-```
-
-
-
-
-    <matplotlib.axes._subplots.AxesSubplot at 0x1a212ccb10>
-
-
-
-
-![svg](ds_unit_1_build_files/ds_unit_1_build_19_1.svg)
-
-
-
-```python
-pd.crosstab(df['EdLevel'], df['EduOther'])
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th>EduOther</th>
-      <th>Completed an industry certification program (e.g. MCPD)</th>
-      <th>Completed an industry certification program (e.g. MCPD);Contributed to open source software</th>
-      <th>Completed an industry certification program (e.g. MCPD);Participated in a hackathon</th>
-      <th>Completed an industry certification program (e.g. MCPD);Participated in a hackathon;Contributed to open source software</th>
-      <th>Completed an industry certification program (e.g. MCPD);Participated in online coding competitions (e.g. HackerRank, CodeChef, TopCoder)</th>
-      <th>Completed an industry certification program (e.g. MCPD);Participated in online coding competitions (e.g. HackerRank, CodeChef, TopCoder);Contributed to open source software</th>
-      <th>Completed an industry certification program (e.g. MCPD);Participated in online coding competitions (e.g. HackerRank, CodeChef, TopCoder);Participated in a hackathon</th>
-      <th>Completed an industry certification program (e.g. MCPD);Participated in online coding competitions (e.g. HackerRank, CodeChef, TopCoder);Participated in a hackathon;Contributed to open source software</th>
-      <th>Completed an industry certification program (e.g. MCPD);Received on-the-job training in software development</th>
-      <th>Completed an industry certification program (e.g. MCPD);Received on-the-job training in software development;Contributed to open source software</th>
-      <th>...</th>
-      <th>Taken an online course in programming or software development (e.g. a MOOC);Taught yourself a new language, framework, or tool without taking a formal course;Participated in online coding competitions (e.g. HackerRank, CodeChef, TopCoder);Participated in a hackathon</th>
-      <th>Taken an online course in programming or software development (e.g. a MOOC);Taught yourself a new language, framework, or tool without taking a formal course;Participated in online coding competitions (e.g. HackerRank, CodeChef, TopCoder);Participated in a hackathon;Contributed to open source software</th>
-      <th>Taught yourself a new language, framework, or tool without taking a formal course</th>
-      <th>Taught yourself a new language, framework, or tool without taking a formal course;Contributed to open source software</th>
-      <th>Taught yourself a new language, framework, or tool without taking a formal course;Participated in a hackathon</th>
-      <th>Taught yourself a new language, framework, or tool without taking a formal course;Participated in a hackathon;Contributed to open source software</th>
-      <th>Taught yourself a new language, framework, or tool without taking a formal course;Participated in online coding competitions (e.g. HackerRank, CodeChef, TopCoder)</th>
-      <th>Taught yourself a new language, framework, or tool without taking a formal course;Participated in online coding competitions (e.g. HackerRank, CodeChef, TopCoder);Contributed to open source software</th>
-      <th>Taught yourself a new language, framework, or tool without taking a formal course;Participated in online coding competitions (e.g. HackerRank, CodeChef, TopCoder);Participated in a hackathon</th>
-      <th>Taught yourself a new language, framework, or tool without taking a formal course;Participated in online coding competitions (e.g. HackerRank, CodeChef, TopCoder);Participated in a hackathon;Contributed to open source software</th>
-    </tr>
-    <tr>
-      <th>EdLevel</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Associate degree</td>
-      <td>11</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>3</td>
-      <td>1</td>
-      <td>...</td>
-      <td>11</td>
-      <td>17</td>
-      <td>212</td>
-      <td>123</td>
-      <td>16</td>
-      <td>22</td>
-      <td>21</td>
-      <td>21</td>
-      <td>10</td>
-      <td>9</td>
-    </tr>
-    <tr>
-      <td>Bachelor’s degree (BA, BS, B.Eng., etc.)</td>
-      <td>107</td>
-      <td>7</td>
-      <td>9</td>
-      <td>6</td>
-      <td>7</td>
-      <td>2</td>
-      <td>4</td>
-      <td>0</td>
-      <td>24</td>
-      <td>5</td>
-      <td>...</td>
-      <td>332</td>
-      <td>521</td>
-      <td>2607</td>
-      <td>1313</td>
-      <td>358</td>
-      <td>497</td>
-      <td>373</td>
-      <td>304</td>
-      <td>234</td>
-      <td>353</td>
-    </tr>
-    <tr>
-      <td>I never completed any formal education</td>
-      <td>6</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>...</td>
-      <td>1</td>
-      <td>3</td>
-      <td>44</td>
-      <td>34</td>
-      <td>0</td>
-      <td>10</td>
-      <td>4</td>
-      <td>5</td>
-      <td>1</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>Master’s degree (MA, MS, M.Eng., MBA, etc.)</td>
-      <td>66</td>
-      <td>9</td>
-      <td>3</td>
-      <td>1</td>
-      <td>5</td>
-      <td>4</td>
-      <td>0</td>
-      <td>1</td>
-      <td>17</td>
-      <td>4</td>
-      <td>...</td>
-      <td>143</td>
-      <td>246</td>
-      <td>1337</td>
-      <td>846</td>
-      <td>134</td>
-      <td>246</td>
-      <td>156</td>
-      <td>197</td>
-      <td>56</td>
-      <td>181</td>
-    </tr>
-    <tr>
-      <td>Other doctoral degree (Ph.D, Ed.D., etc.)</td>
-      <td>5</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>6</td>
-      <td>31</td>
-      <td>219</td>
-      <td>221</td>
-      <td>11</td>
-      <td>59</td>
-      <td>15</td>
-      <td>41</td>
-      <td>4</td>
-      <td>25</td>
-    </tr>
-    <tr>
-      <td>Primary/elementary school</td>
-      <td>3</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>8</td>
-      <td>15</td>
-      <td>198</td>
-      <td>96</td>
-      <td>6</td>
-      <td>17</td>
-      <td>26</td>
-      <td>18</td>
-      <td>3</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <td>Professional degree (JD, MD, etc.)</td>
-      <td>3</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>...</td>
-      <td>4</td>
-      <td>4</td>
-      <td>75</td>
-      <td>38</td>
-      <td>8</td>
-      <td>7</td>
-      <td>10</td>
-      <td>6</td>
-      <td>1</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <td>Secondary school (e.g. American high school, German Realschule or Gymnasium, etc.)</td>
-      <td>19</td>
-      <td>1</td>
-      <td>2</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>5</td>
-      <td>1</td>
-      <td>...</td>
-      <td>88</td>
-      <td>140</td>
-      <td>990</td>
-      <td>527</td>
-      <td>75</td>
-      <td>141</td>
-      <td>147</td>
-      <td>161</td>
-      <td>50</td>
-      <td>102</td>
-    </tr>
-    <tr>
-      <td>Some college/university study without earning a degree</td>
-      <td>23</td>
-      <td>6</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>4</td>
-      <td>0</td>
-      <td>...</td>
-      <td>47</td>
-      <td>119</td>
-      <td>816</td>
-      <td>534</td>
-      <td>78</td>
-      <td>141</td>
-      <td>81</td>
-      <td>113</td>
-      <td>33</td>
-      <td>107</td>
-    </tr>
-  </tbody>
-</table>
-<p>9 rows × 490 columns</p>
-</div>
-
-
-
-
-```python
+# see if EdLevel has null values
 df['EdLevel'].isna().sum()
 ```
 
@@ -1221,6 +679,7 @@ df['EdLevel'].isna().sum()
 
 
 ```python
+# see how the value counts for each categorical value
 df['EdLevel'].value_counts()
 ```
 
@@ -1242,7 +701,7 @@ df['EdLevel'].value_counts()
 
 
 ```python
-# let's see education level
+# let's visualize education level
 data = go.Histogram(
     y=df['EdLevel'],
     histnorm='percent'
@@ -1263,41 +722,40 @@ fig.show()
 
 
 ```python
-fig = px.box(df, x="EdLevel", y='ConvertedComp', range_y=[0, 2*10**5])
-fig.show()
-```
-
-
-
-
-```python
 # let's define df for only United States Country respondent
 df_us = df[df['Country'] == 'United States']
-df_us['Country'].head()
+```
+
+
+```python
+df_us['EdLevel'].value_counts()
 ```
 
 
 
 
-    3     United States
-    12    United States
-    21    United States
-    22    United States
-    25    United States
-    Name: Country, dtype: object
+    Bachelor’s degree (BA, BS, B.Eng., etc.)                                              10953
+    Master’s degree (MA, MS, M.Eng., MBA, etc.)                                            3585
+    Some college/university study without earning a degree                                 2779
+    Secondary school (e.g. American high school, German Realschule or Gymnasium, etc.)     1113
+    Associate degree                                                                        977
+    Other doctoral degree (Ph.D, Ed.D., etc.)                                               673
+    Primary/elementary school                                                               310
+    Professional degree (JD, MD, etc.)                                                      119
+    I never completed any formal education                                                   96
+    Name: EdLevel, dtype: int64
 
 
 
 
 ```python
-# I need to show exact median values for B.S. degree vs I never completed formal education
-df_us.groupby(['EdLevel'])['ConvertedComp'].median()
+# Salary with education levels
+print('salary median for B.S. degree in all majors\n', df_us.groupby(['EdLevel'])['ConvertedComp'].median())
+str_bs_ed_level = 'Bachelor’s degree (BA, BS, B.Eng., etc.)'
 ```
 
-
-
-
-    EdLevel
+    salary median for B.S. degree in all majors
+     EdLevel
     Associate degree                                                                       90000.0
     Bachelor’s degree (BA, BS, B.Eng., etc.)                                              110000.0
     I never completed any formal education                                                123500.0
@@ -1310,715 +768,656 @@ df_us.groupby(['EdLevel'])['ConvertedComp'].median()
     Name: ConvertedComp, dtype: float64
 
 
+## result
+B.S. undergraduate degree salary median is 110,000 USD.
+However, I think I need to filter only C.S. or similar degree here. That way, I expect to get higher median value. Another way to say is that I assum non-CS major in SW engieering field will have lower salary. 
 
 
 ```python
+# what majors do i have
+df_us['UndergradMajor'].value_counts()
+```
+
+
+
+
+    Computer science, computer engineering, or software engineering          10747
+    Another engineering discipline (ex. civil, electrical, mechanical)        1344
+    Information systems, information technology, or system administration     1186
+    A natural science (ex. biology, chemistry, physics)                        961
+    Mathematics or statistics                                                  895
+    A humanities discipline (ex. literature, history, philosophy)              718
+    A social science (ex. anthropology, psychology, political science)         695
+    Fine arts or performing arts (ex. graphic design, music, studio art)       667
+    A business discipline (ex. accounting, finance, marketing)                 615
+    Web development or web design                                              493
+    I never declared a major                                                   345
+    A health science (ex. nursing, pharmacy, radiology)                         87
+    Name: UndergradMajor, dtype: int64
+
+
+
+
+```python
+# get the string for C.S or similar major
+str_cs_degree = df_us['UndergradMajor'].iloc[3733]
+str_cs_degree
+```
+
+
+
+
+    'Computer science, computer engineering, or software engineering'
+
+
+
+
+```python
+# Salary with education levels specifically CS major
+condition_bs_degree = df_us['EdLevel'] == str_bs_ed_level
+condition_cs_bs_major = condition_bs_degree & (df_us['UndergradMajor'] == str_cs_degree)
+
+# there is something wrong with 10953 because number of bs degree cannot be number of cs undergrad major
+# I need to show that b.s. degree filter has all majors
+print('number of people who has B.S. degree in all majors\n', df_us[condition_bs_degree]['EdLevel'].value_counts())
+print('number of people who has B.S. degree in computer science or similar\n', df_us[condition_cs_bs_major]['EdLevel'].value_counts())
+print('salary median for people with B.S. degree in C.S and their education level is B.S.\n', df_us[condition_cs_bs_major].groupby(['EdLevel'])['ConvertedComp'].median())
+```
+
+    number of people who has B.S. degree in all majors
+     Bachelor’s degree (BA, BS, B.Eng., etc.)    10953
+    Name: EdLevel, dtype: int64
+    number of people who has B.S. degree in computer science or similar
+     Bachelor’s degree (BA, BS, B.Eng., etc.)    6449
+    Name: EdLevel, dtype: int64
+    salary median for people with B.S. degree in C.S and their education level is B.S.
+     EdLevel
+    Bachelor’s degree (BA, BS, B.Eng., etc.)    110250.0
+    Name: ConvertedComp, dtype: float64
+
+
+## result
+The median value for C.S. or similar undergraduate B.S. degree is more or less the same than overal B.S. degree people. Therefore, my assumption that 'C.S. degree median salary will be higher' is wrong.
+
+
+```python
+# here we have to update years of coding as pforessional column string values to integere values
 df_us['YearsCodePro'] = df_us['YearsCodePro'].apply(lambda x: 0.5 if x == 'Less than 1 year' else (50 if x == 'More than 50 years' else x))
 ```
 
 
 ```python
-df_us.head()
+df_us['YearsCodePro'].sample(20)
 ```
 
 
 
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Respondent</th>
-      <th>MainBranch</th>
-      <th>Hobbyist</th>
-      <th>OpenSourcer</th>
-      <th>OpenSource</th>
-      <th>Employment</th>
-      <th>Country</th>
-      <th>Student</th>
-      <th>EdLevel</th>
-      <th>UndergradMajor</th>
-      <th>...</th>
-      <th>WelcomeChange</th>
-      <th>SONewContent</th>
-      <th>Age</th>
-      <th>Gender</th>
-      <th>Trans</th>
-      <th>Sexuality</th>
-      <th>Ethnicity</th>
-      <th>Dependents</th>
-      <th>SurveyLength</th>
-      <th>SurveyEase</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>3</td>
-      <td>4</td>
-      <td>I am a developer by profession</td>
-      <td>No</td>
-      <td>Never</td>
-      <td>The quality of OSS and closed source software ...</td>
-      <td>Employed full-time</td>
-      <td>United States</td>
-      <td>No</td>
-      <td>Bachelor’s degree (BA, BS, B.Eng., etc.)</td>
-      <td>Computer science, computer engineering, or sof...</td>
-      <td>...</td>
-      <td>Just as welcome now as I felt last year</td>
-      <td>Tech articles written by other developers;Indu...</td>
-      <td>22.0</td>
-      <td>Man</td>
-      <td>No</td>
-      <td>Straight / Heterosexual</td>
-      <td>White or of European descent</td>
-      <td>No</td>
-      <td>Appropriate in length</td>
-      <td>Easy</td>
-    </tr>
-    <tr>
-      <td>12</td>
-      <td>13</td>
-      <td>I am a developer by profession</td>
-      <td>Yes</td>
-      <td>Less than once a month but more than once per ...</td>
-      <td>OSS is, on average, of HIGHER quality than pro...</td>
-      <td>Employed full-time</td>
-      <td>United States</td>
-      <td>No</td>
-      <td>Master’s degree (MA, MS, M.Eng., MBA, etc.)</td>
-      <td>Computer science, computer engineering, or sof...</td>
-      <td>...</td>
-      <td>Somewhat more welcome now than last year</td>
-      <td>Tech articles written by other developers;Cour...</td>
-      <td>28.0</td>
-      <td>Man</td>
-      <td>No</td>
-      <td>Straight / Heterosexual</td>
-      <td>White or of European descent</td>
-      <td>Yes</td>
-      <td>Appropriate in length</td>
-      <td>Easy</td>
-    </tr>
-    <tr>
-      <td>21</td>
-      <td>22</td>
-      <td>I am a developer by profession</td>
-      <td>Yes</td>
-      <td>Less than once per year</td>
-      <td>OSS is, on average, of HIGHER quality than pro...</td>
-      <td>Employed full-time</td>
-      <td>United States</td>
-      <td>No</td>
-      <td>Some college/university study without earning ...</td>
-      <td>NaN</td>
-      <td>...</td>
-      <td>Just as welcome now as I felt last year</td>
-      <td>Tech articles written by other developers;Indu...</td>
-      <td>47.0</td>
-      <td>Man</td>
-      <td>No</td>
-      <td>Straight / Heterosexual</td>
-      <td>White or of European descent</td>
-      <td>Yes</td>
-      <td>Appropriate in length</td>
-      <td>Easy</td>
-    </tr>
-    <tr>
-      <td>22</td>
-      <td>23</td>
-      <td>I am a developer by profession</td>
-      <td>Yes</td>
-      <td>Less than once per year</td>
-      <td>The quality of OSS and closed source software ...</td>
-      <td>Employed full-time</td>
-      <td>United States</td>
-      <td>No</td>
-      <td>Bachelor’s degree (BA, BS, B.Eng., etc.)</td>
-      <td>Information systems, information technology, o...</td>
-      <td>...</td>
-      <td>Just as welcome now as I felt last year</td>
-      <td>Tech articles written by other developers;Tech...</td>
-      <td>22.0</td>
-      <td>Man</td>
-      <td>No</td>
-      <td>Straight / Heterosexual</td>
-      <td>Black or of African descent</td>
-      <td>No</td>
-      <td>Appropriate in length</td>
-      <td>Easy</td>
-    </tr>
-    <tr>
-      <td>25</td>
-      <td>26</td>
-      <td>I am a developer by profession</td>
-      <td>Yes</td>
-      <td>Less than once per year</td>
-      <td>The quality of OSS and closed source software ...</td>
-      <td>Employed full-time</td>
-      <td>United States</td>
-      <td>No</td>
-      <td>Some college/university study without earning ...</td>
-      <td>Computer science, computer engineering, or sof...</td>
-      <td>...</td>
-      <td>Just as welcome now as I felt last year</td>
-      <td>NaN</td>
-      <td>34.0</td>
-      <td>Man</td>
-      <td>No</td>
-      <td>Gay or Lesbian</td>
-      <td>NaN</td>
-      <td>No</td>
-      <td>Appropriate in length</td>
-      <td>Easy</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 85 columns</p>
-</div>
+    81473      1
+    56714      7
+    71342    NaN
+    19982      1
+    10991      1
+    86387     23
+    75534      2
+    17647     17
+    66701     10
+    42384    0.5
+    77301    NaN
+    30337    NaN
+    62335     20
+    18719      1
+    48194      5
+    46498     18
+    26382      3
+    74167    0.5
+    32180    NaN
+    77322      4
+    Name: YearsCodePro, dtype: object
 
 
 
 
 ```python
-df_us[df_us['YearsCodePro'] == 0.5]
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Respondent</th>
-      <th>MainBranch</th>
-      <th>Hobbyist</th>
-      <th>OpenSourcer</th>
-      <th>OpenSource</th>
-      <th>Employment</th>
-      <th>Country</th>
-      <th>Student</th>
-      <th>EdLevel</th>
-      <th>UndergradMajor</th>
-      <th>...</th>
-      <th>WelcomeChange</th>
-      <th>SONewContent</th>
-      <th>Age</th>
-      <th>Gender</th>
-      <th>Trans</th>
-      <th>Sexuality</th>
-      <th>Ethnicity</th>
-      <th>Dependents</th>
-      <th>SurveyLength</th>
-      <th>SurveyEase</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>3</td>
-      <td>4</td>
-      <td>I am a developer by profession</td>
-      <td>No</td>
-      <td>Never</td>
-      <td>The quality of OSS and closed source software ...</td>
-      <td>Employed full-time</td>
-      <td>United States</td>
-      <td>No</td>
-      <td>Bachelor’s degree (BA, BS, B.Eng., etc.)</td>
-      <td>Computer science, computer engineering, or sof...</td>
-      <td>...</td>
-      <td>Just as welcome now as I felt last year</td>
-      <td>Tech articles written by other developers;Indu...</td>
-      <td>22.0</td>
-      <td>Man</td>
-      <td>No</td>
-      <td>Straight / Heterosexual</td>
-      <td>White or of European descent</td>
-      <td>No</td>
-      <td>Appropriate in length</td>
-      <td>Easy</td>
-    </tr>
-    <tr>
-      <td>306</td>
-      <td>308</td>
-      <td>I am a developer by profession</td>
-      <td>Yes</td>
-      <td>Never</td>
-      <td>OSS is, on average, of HIGHER quality than pro...</td>
-      <td>Employed full-time</td>
-      <td>United States</td>
-      <td>No</td>
-      <td>Master’s degree (MA, MS, M.Eng., MBA, etc.)</td>
-      <td>Computer science, computer engineering, or sof...</td>
-      <td>...</td>
-      <td>Just as welcome now as I felt last year</td>
-      <td>NaN</td>
-      <td>36.0</td>
-      <td>Woman</td>
-      <td>No</td>
-      <td>Straight / Heterosexual</td>
-      <td>White or of European descent</td>
-      <td>No</td>
-      <td>Appropriate in length</td>
-      <td>Easy</td>
-    </tr>
-    <tr>
-      <td>316</td>
-      <td>318</td>
-      <td>I am a developer by profession</td>
-      <td>Yes</td>
-      <td>Less than once per year</td>
-      <td>The quality of OSS and closed source software ...</td>
-      <td>Employed full-time</td>
-      <td>United States</td>
-      <td>Yes, full-time</td>
-      <td>Bachelor’s degree (BA, BS, B.Eng., etc.)</td>
-      <td>Computer science, computer engineering, or sof...</td>
-      <td>...</td>
-      <td>Just as welcome now as I felt last year</td>
-      <td>NaN</td>
-      <td>21.0</td>
-      <td>Man</td>
-      <td>No</td>
-      <td>Bisexual;Straight / Heterosexual</td>
-      <td>South Asian</td>
-      <td>No</td>
-      <td>Too long</td>
-      <td>Easy</td>
-    </tr>
-    <tr>
-      <td>378</td>
-      <td>380</td>
-      <td>I am a developer by profession</td>
-      <td>No</td>
-      <td>Never</td>
-      <td>OSS is, on average, of HIGHER quality than pro...</td>
-      <td>Employed part-time</td>
-      <td>United States</td>
-      <td>No</td>
-      <td>Secondary school (e.g. American high school, G...</td>
-      <td>NaN</td>
-      <td>...</td>
-      <td>Just as welcome now as I felt last year</td>
-      <td>NaN</td>
-      <td>34.0</td>
-      <td>Woman</td>
-      <td>No</td>
-      <td>Bisexual</td>
-      <td>White or of European descent</td>
-      <td>No</td>
-      <td>Appropriate in length</td>
-      <td>Easy</td>
-    </tr>
-    <tr>
-      <td>381</td>
-      <td>383</td>
-      <td>I am not primarily a developer, but I write co...</td>
-      <td>Yes</td>
-      <td>Never</td>
-      <td>OSS is, on average, of HIGHER quality than pro...</td>
-      <td>Employed full-time</td>
-      <td>United States</td>
-      <td>No</td>
-      <td>Master’s degree (MA, MS, M.Eng., MBA, etc.)</td>
-      <td>Information systems, information technology, o...</td>
-      <td>...</td>
-      <td>Just as welcome now as I felt last year</td>
-      <td>Tech articles written by other developers;Tech...</td>
-      <td>38.0</td>
-      <td>Man</td>
-      <td>No</td>
-      <td>Straight / Heterosexual</td>
-      <td>White or of European descent</td>
-      <td>Yes</td>
-      <td>Appropriate in length</td>
-      <td>Easy</td>
-    </tr>
-    <tr>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <td>88773</td>
-      <td>70197</td>
-      <td>NaN</td>
-      <td>No</td>
-      <td>Once a month or more often</td>
-      <td>OSS is, on average, of HIGHER quality than pro...</td>
-      <td>Independent contractor, freelancer, or self-em...</td>
-      <td>United States</td>
-      <td>No</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>...</td>
-      <td>Not applicable - I did not use Stack Overflow ...</td>
-      <td>Courses on technologies you're interested in</td>
-      <td>NaN</td>
-      <td>Woman</td>
-      <td>No</td>
-      <td>NaN</td>
-      <td>Black or of African descent</td>
-      <td>Yes</td>
-      <td>Too long</td>
-      <td>Easy</td>
-    </tr>
-    <tr>
-      <td>88777</td>
-      <td>70955</td>
-      <td>NaN</td>
-      <td>No</td>
-      <td>Once a month or more often</td>
-      <td>The quality of OSS and closed source software ...</td>
-      <td>Not employed, but looking for work</td>
-      <td>United States</td>
-      <td>NaN</td>
-      <td>I never completed any formal education</td>
-      <td>NaN</td>
-      <td>...</td>
-      <td>Not applicable - I did not use Stack Overflow ...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Non-binary, genderqueer, or gender non-conforming</td>
-      <td>No</td>
-      <td>NaN</td>
-      <td>Native American, Pacific Islander, or Indigeno...</td>
-      <td>Yes</td>
-      <td>Appropriate in length</td>
-      <td>Neither easy nor difficult</td>
-    </tr>
-    <tr>
-      <td>88840</td>
-      <td>82717</td>
-      <td>NaN</td>
-      <td>No</td>
-      <td>Less than once per year</td>
-      <td>The quality of OSS and closed source software ...</td>
-      <td>Not employed, but looking for work</td>
-      <td>United States</td>
-      <td>No</td>
-      <td>Secondary school (e.g. American high school, G...</td>
-      <td>NaN</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>Industry news about technologies you're intere...</td>
-      <td>44.0</td>
-      <td>Man</td>
-      <td>No</td>
-      <td>Straight / Heterosexual</td>
-      <td>White or of European descent</td>
-      <td>Yes</td>
-      <td>Appropriate in length</td>
-      <td>Neither easy nor difficult</td>
-    </tr>
-    <tr>
-      <td>88844</td>
-      <td>83397</td>
-      <td>NaN</td>
-      <td>Yes</td>
-      <td>Less than once per year</td>
-      <td>NaN</td>
-      <td>Not employed, but looking for work</td>
-      <td>United States</td>
-      <td>No</td>
-      <td>Bachelor’s degree (BA, BS, B.Eng., etc.)</td>
-      <td>Computer science, computer engineering, or sof...</td>
-      <td>...</td>
-      <td>Just as welcome now as I felt last year</td>
-      <td>NaN</td>
-      <td>27.0</td>
-      <td>Woman</td>
-      <td>No</td>
-      <td>Bisexual</td>
-      <td>White or of European descent</td>
-      <td>No</td>
-      <td>Appropriate in length</td>
-      <td>Easy</td>
-    </tr>
-    <tr>
-      <td>88859</td>
-      <td>85642</td>
-      <td>NaN</td>
-      <td>No</td>
-      <td>Less than once per year</td>
-      <td>OSS is, on average, of LOWER quality than prop...</td>
-      <td>Independent contractor, freelancer, or self-em...</td>
-      <td>United States</td>
-      <td>No</td>
-      <td>Associate degree</td>
-      <td>Information systems, information technology, o...</td>
-      <td>...</td>
-      <td>Just as welcome now as I felt last year</td>
-      <td>Tech articles written by other developers;Indu...</td>
-      <td>34.0</td>
-      <td>Non-binary, genderqueer, or gender non-conforming</td>
-      <td>NaN</td>
-      <td>Bisexual;Gay or Lesbian</td>
-      <td>White or of European descent</td>
-      <td>No</td>
-      <td>Appropriate in length</td>
-      <td>Easy</td>
-    </tr>
-  </tbody>
-</table>
-<p>833 rows × 85 columns</p>
-</div>
-
-
-
-
-```python
-# df_us['YearsCodePro'] = df_us['YearsCodePro'].astype(int) // this cannot take care of NaN
+# I'm not sure why but below astype cannot take care of NaN
+# df_us['YearsCodePro'] = df_us['YearsCodePro'].astype(int) 
 df_us['YearsCodePro'] = pd.to_numeric(df_us['YearsCodePro'])
 ```
 
 
 ```python
-df_us.dtypes
+# see if the type updated
+df_us['YearsCodePro'].dtypes
 ```
 
 
 
 
-    Respondent                  int64
-    MainBranch                 object
-    Hobbyist                   object
-    OpenSourcer                object
-    OpenSource                 object
-    Employment                 object
-    Country                    object
-    Student                    object
-    EdLevel                    object
-    UndergradMajor             object
-    EduOther                   object
-    OrgSize                    object
-    DevType                    object
-    YearsCode                  object
-    Age1stCode                 object
-    YearsCodePro              float64
-    CareerSat                  object
-    JobSat                     object
-    MgrIdiot                   object
-    MgrMoney                   object
-    MgrWant                    object
-    JobSeek                    object
-    LastHireDate               object
-    LastInt                    object
-    FizzBuzz                   object
-    JobFactors                 object
-    ResumeUpdate               object
-    CurrencySymbol             object
-    CurrencyDesc               object
-    CompTotal                 float64
-    CompFreq                   object
-    ConvertedComp             float64
-    WorkWeekHrs               float64
-    WorkPlan                   object
-    WorkChallenge              object
-    WorkRemote                 object
-    WorkLoc                    object
-    ImpSyn                     object
-    CodeRev                    object
-    CodeRevHrs                float64
-    UnitTests                  object
-    PurchaseHow                object
-    PurchaseWhat               object
-    LanguageWorkedWith         object
-    LanguageDesireNextYear     object
-    DatabaseWorkedWith         object
-    DatabaseDesireNextYear     object
-    PlatformWorkedWith         object
-    PlatformDesireNextYear     object
-    WebFrameWorkedWith         object
-    WebFrameDesireNextYear     object
-    MiscTechWorkedWith         object
-    MiscTechDesireNextYear     object
-    DevEnviron                 object
-    OpSys                      object
-    Containers                 object
-    BlockchainOrg              object
-    BlockchainIs               object
-    BetterLife                 object
-    ITperson                   object
-    OffOn                      object
-    SocialMedia                object
-    Extraversion               object
-    ScreenName                 object
-    SOVisit1st                 object
-    SOVisitFreq                object
-    SOVisitTo                  object
-    SOFindAnswer               object
-    SOTimeSaved                object
-    SOHowMuchTime              object
-    SOAccount                  object
-    SOPartFreq                 object
-    SOJobs                     object
-    EntTeams                   object
-    SOComm                     object
-    WelcomeChange              object
-    SONewContent               object
-    Age                       float64
-    Gender                     object
-    Trans                      object
-    Sexuality                  object
-    Ethnicity                  object
-    Dependents                 object
-    SurveyLength               object
-    SurveyEase                 object
-    dtype: object
+    dtype('float64')
 
 
 
 
 ```python
-df_us.groupby(['Code'])
+edu_level = df_us.pivot_table(
+    index = 'EdLevel',
+    columns='YearsCodePro',
+    values='ConvertedComp',
+    aggfunc={
+        'ConvertedComp': np.median
+        }
+    )
+bs_degree = edu_level[edu_level.index == str_bs_ed_level]
+bs_degree
 ```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>YearsCodePro</th>
+      <th>0.5</th>
+      <th>1.0</th>
+      <th>2.0</th>
+      <th>3.0</th>
+      <th>4.0</th>
+      <th>5.0</th>
+      <th>6.0</th>
+      <th>7.0</th>
+      <th>8.0</th>
+      <th>9.0</th>
+      <th>...</th>
+      <th>40.0</th>
+      <th>41.0</th>
+      <th>42.0</th>
+      <th>43.0</th>
+      <th>44.0</th>
+      <th>45.0</th>
+      <th>47.0</th>
+      <th>48.0</th>
+      <th>49.0</th>
+      <th>50.0</th>
+    </tr>
+    <tr>
+      <th>EdLevel</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Bachelor’s degree (BA, BS, B.Eng., etc.)</td>
+      <td>70700.0</td>
+      <td>75000.0</td>
+      <td>81000.0</td>
+      <td>90000.0</td>
+      <td>95000.0</td>
+      <td>101000.0</td>
+      <td>106000.0</td>
+      <td>111000.0</td>
+      <td>120000.0</td>
+      <td>130000.0</td>
+      <td>...</td>
+      <td>132500.0</td>
+      <td>133400.0</td>
+      <td>125000.0</td>
+      <td>92000.0</td>
+      <td>115000.0</td>
+      <td>180000.0</td>
+      <td>145000.0</td>
+      <td>157500.0</td>
+      <td>176000.0</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>1 rows × 50 columns</p>
+</div>
+
+
 
 
 ```python
-# condition for B.S. in computer science or similar degree in U.S
-condition_1 = (df_us['UndergradMajor'] == 'Computer science, computer engineering, or software engineering')
-result = df_us[condition].groupby(['EdLevel'])['ConvertedComp'].median()
-print('Compensation with EdLevel with less than 3 years of professional coding expereince\n', result)
+edu_level = df_us[condition_cs_bs_major].pivot_table(
+    index = 'EdLevel',
+    columns='YearsCodePro',
+    values='ConvertedComp',
+    aggfunc={
+        'ConvertedComp': np.median
+        }
+    )
+bs_cs_degree = edu_level[edu_level.index == str_bs_ed_level]
+bs_cs_degree
 ```
 
-    Compensation with EdLevel with less than 3 years of professional coding expereince
-     EdLevel
-    Associate degree                                           60000.0
-    Bachelor’s degree (BA, BS, B.Eng., etc.)                   82000.0
-    Master’s degree (MA, MS, M.Eng., MBA, etc.)               100000.0
-    Other doctoral degree (Ph.D, Ed.D., etc.)                 125000.0
-    Professional degree (JD, MD, etc.)                         64200.0
-    Some college/university study without earning a degree     60000.0
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>YearsCodePro</th>
+      <th>0.5</th>
+      <th>1.0</th>
+      <th>2.0</th>
+      <th>3.0</th>
+      <th>4.0</th>
+      <th>5.0</th>
+      <th>6.0</th>
+      <th>7.0</th>
+      <th>8.0</th>
+      <th>9.0</th>
+      <th>...</th>
+      <th>37.0</th>
+      <th>38.0</th>
+      <th>39.0</th>
+      <th>40.0</th>
+      <th>41.0</th>
+      <th>42.0</th>
+      <th>43.0</th>
+      <th>44.0</th>
+      <th>45.0</th>
+      <th>47.0</th>
+    </tr>
+    <tr>
+      <th>EdLevel</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Bachelor’s degree (BA, BS, B.Eng., etc.)</td>
+      <td>72900.0</td>
+      <td>75000.0</td>
+      <td>82000.0</td>
+      <td>90000.0</td>
+      <td>95000.0</td>
+      <td>105000.0</td>
+      <td>105000.0</td>
+      <td>114500.0</td>
+      <td>130000.0</td>
+      <td>130000.0</td>
+      <td>...</td>
+      <td>123500.0</td>
+      <td>145000.0</td>
+      <td>150000.0</td>
+      <td>155000.0</td>
+      <td>133400.0</td>
+      <td>90000.0</td>
+      <td>91000.0</td>
+      <td>115000.0</td>
+      <td>180000.0</td>
+      <td>220000.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>1 rows × 47 columns</p>
+</div>
+
+
+
+
+```python
+edu_other = df_us.pivot_table(
+    index = 'EduOther',
+    columns='YearsCodePro',
+    values='ConvertedComp',
+    aggfunc={
+        'ConvertedComp': np.median
+        }
+    )
+# bootcamp.shape
+bootcamp_graduate = edu_other[bootcamp.index == 'Participated in a full-time developer training program or bootcamp']
+bootcamp_graduate
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>YearsCodePro</th>
+      <th>0.5</th>
+      <th>1.0</th>
+      <th>2.0</th>
+      <th>3.0</th>
+      <th>4.0</th>
+      <th>5.0</th>
+      <th>6.0</th>
+      <th>7.0</th>
+      <th>8.0</th>
+      <th>9.0</th>
+      <th>...</th>
+      <th>40.0</th>
+      <th>41.0</th>
+      <th>42.0</th>
+      <th>43.0</th>
+      <th>44.0</th>
+      <th>45.0</th>
+      <th>47.0</th>
+      <th>48.0</th>
+      <th>49.0</th>
+      <th>50.0</th>
+    </tr>
+    <tr>
+      <th>EduOther</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Participated in a full-time developer training program or bootcamp</td>
+      <td>68000.0</td>
+      <td>71000.0</td>
+      <td>83750.0</td>
+      <td>88500.0</td>
+      <td>87000.0</td>
+      <td>112000.0</td>
+      <td>567500.0</td>
+      <td>NaN</td>
+      <td>65000.0</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>1 rows × 50 columns</p>
+</div>
+
+
+
+
+```python
+years_code_pro = bootcamp.columns.tolist()
+
+fig = go.Figure(
+    data=[
+        go.Bar(name='B.S in Computer Science', x=years_code_pro, y=bs_degree_cs.values.tolist()[0]),
+        go.Bar(name='Bootcamp Graduates', x=years_code_pro, y=bootcamp_graduate.values.tolist()[0])
+    ]
+)
+# Change the bar mode
+fig.update_layout(
+    title='Salary Comparison between CS degree and Bootcamp',
+    xaxis_title='number of years of professional coding',
+    yaxis_title='Salaray(median) in dollars',
+    barmode='group'
+    )
+fig.show()
+```
+
+
+
+# Plot Result
+I have an insane salary median peak for bootcamp graduate at 6 years of professional coding expereience. I am very skeptical about it. This can't be right unless someone went to coding bootcamp years ago and he or she quickly went IPO and somehow he or she submitted stackoverflow survey. Also, there should not many people in that condition unless otherwise the insane peak cannot be shown. Therefore, let's investigate what's going on here.   
+
+
+```python
+# we will find if the 6 years of pro coding exp people really have insane median peak here
+condition_4 = (df['EduOther'] == str_bootcamp_graduate)
+bootcamp_grad_salary = df_us[condition_4]['ConvertedComp']
+bootcamp_grad_years = df_us[condition_4]['YearsCodePro']
+bootcamp_grad_comp_per_years_med = df_us[condition_4].groupby(['YearsCodePro'])['ConvertedComp'].median()
+condition_5 = condition_4 & (df_us['YearsCodePro'] == 6)
+bootcamp_grad_with_6_yrs = df_us[condition_5]['ConvertedComp']
+print(bootcamp_grad_with_6_yrs)
+```
+
+    67663    1000000.0
+    73526     135000.0
+    Name: ConvertedComp, dtype: float64
+
+
+## Investigation Result
+we found that index 67663 gave 1,000,000 for his convertedComp, salary
+which is either a additional digit mistake or on purpose
+1. fix digit
+2. drop the row
+
+Let's fix the digit assuming the respondent had a typo.
+
+
+```python
+# let's fix the digit typo
+df_us.set_value(67663, 'ConvertedComp', 100000)
+print('is it fixed?', df_us[df_us.index == 67663]['ConvertedComp'])
+```
+
+    is it fixed? 67663    100000.0
     Name: ConvertedComp, dtype: float64
 
 
 
 ```python
-# condition for B.S. in computer science or similar degree in U.S, less than 5 years of professional coding experience
-condition_2 = (df_us['UndergradMajor'] == 'Computer science, computer engineering, or software engineering')
-result = df_us[condition_2].groupby(['EdLevel'])['ConvertedComp'].median()
-print('Compensation with EdLevel with less than 3 years of professional coding expereince\n', result)
+# let's plot it again with fixed typo
+edu_level = df_us[condition_cs_bs_major].pivot_table(
+    index = 'EdLevel',
+    columns='YearsCodePro',
+    values='ConvertedComp',
+    aggfunc={
+        'ConvertedComp': np.median
+        }
+    )
+edu_other = df_us.pivot_table(
+    index = 'EduOther',
+    columns='YearsCodePro',
+    values='ConvertedComp',
+    aggfunc={
+        'ConvertedComp': np.median
+        }
+    )
+bs_cs_degree = edu_level[edu_level.index == str_bs_ed_level]
+bootcamp_graduate = edu_other[bootcamp.index == 'Participated in a full-time developer training program or bootcamp']
+
+years_code_pro = bootcamp.columns.tolist()
+
+fig = go.Figure(
+    data=[
+        go.Bar(name='B.S in Computer Science', x=years_code_pro, y=bs_degree_cs.values.tolist()[0]),
+        go.Bar(name='Bootcamp Graduates', x=years_code_pro, y=bootcamp_graduate.values.tolist()[0])
+    ]
+)
+# Change the bar mode
+fig.update_layout(
+    xaxis=dict(range=[0, 10], dtick=1),
+    title='Salary Comparison between CS degree and Bootcamp',
+    xaxis_title='number of years of professional coding',
+    yaxis_title='Salaray(median) in dollars',
+    barmode='group'
+    )
+fig.show()
 ```
 
-    Compensation with EdLevel with less than 3 years of professional coding expereince
+
+
+## Plot
+plot is now updatedd with fixed data.
+I trimmed years of coding prefossional down to 10 years max because according to wiki it says the coding bootcamp has been for 9 years. 
+
+
+# Final Analysis
+My hypothesis was
+The bootcamp graduates are valued as equal as B.S. degree in Computer Science in the field
+
+I think i came up with reasonable data which supports my hypothesis because the first 6 years of professional career years, the salary medians are pretty close each other. For range from 5 to 6 years, coding bootcamp graduates were even more valued in the field.
+
+Of course, I think we need more years to validate this idea because coding bootcamp graduates gorup is a lot less in terms of number of people in the group. 
+
+
+
+
+```python
+# condition for B.S. in computer science or similar major in U.S
+cond_cs_mjr = df_us['UndergradMajor'] == str_cs_degree
+cond_bs_dgr = df_us['EdLevel'] == str_bs_ed_level
+cond_less_3_yrs = df_us['YearsCodePro'] < 3
+cond_more_3_yrs = (df_us['YearsCodePro'] >= 3) & df_us['YearsCodePro'] <= 9
+
+result_bs_cs_less_3 = df_us[cond_cs_mjr & cond_bs_dgr & cond_less_3_yrs].groupby(['EdLevel'])['ConvertedComp'].median()
+result_bs_cs_more_3 = df_us[cond_cs_mjr & cond_bs_dgr & cond_more_3_yrs].groupby(['EdLevel'])['ConvertedComp'].median()
+print('Compensation with B.S. in CS with less than 3 years of professional coding expereince\n', result_less_3)
+print('Compensation with B.S. in CS with more than 3 years of professional coding expereince\n', result_more_3)
+```
+
+    Compensation with B.S. in CS with less than 3 years of professional coding expereince
      EdLevel
-    Associate degree                                           95000.0
-    Bachelor’s degree (BA, BS, B.Eng., etc.)                  110250.0
-    Master’s degree (MA, MS, M.Eng., MBA, etc.)               132000.0
-    Other doctoral degree (Ph.D, Ed.D., etc.)                 169000.0
-    Professional degree (JD, MD, etc.)                        120000.0
-    Some college/university study without earning a degree    105000.0
+    Bachelor’s degree (BA, BS, B.Eng., etc.)    77250.0
+    Name: ConvertedComp, dtype: float64
+    Compensation with B.S. in CS with more than 3 years of professional coding expereince
+     EdLevel
+    Bachelor’s degree (BA, BS, B.Eng., etc.)    115500.0
     Name: ConvertedComp, dtype: float64
 
 
 
 ```python
 # I need to show exact median values for B.S. degree vs I never completed formal education
-condition_1 = df['EduOther'] == 'Participated in a full-time developer training program or bootcamp'
+str_bootcamp_graduate = 'Participated in a full-time developer training program or bootcamp'
+
+condition_1 = df['EduOther'] == str_bootcamp_graduate
 bootcamp_grad_comp = df_us[condition_1].groupby(['EduOther'])['ConvertedComp'].median()
-condition_2 = (df['EduOther'] == 'Participated in a full-time developer training program or bootcamp') & (df_us['YearsCodePro'] >= 3)
-bootcamp_grad_three_years_exp_comp = df_us[condition_2].groupby(['EduOther'])['ConvertedComp'].median()
+
+condition_2 = condition_1 & (df_us['YearsCodePro'] <= 3)
+result_bootcamp_grad_three_years_less_exp_comp = df_us[condition_2].groupby(['EduOther'])['ConvertedComp'].median()
+
+condition_3 = condition_1 & (df_us['YearsCodePro'] >= 3)
+result_bootcamp_grad_three_years_more_exp_comp = df_us[condition_3].groupby(['EduOther'])['ConvertedComp'].median()
 
 print('boot camp grad compensation\n', bootcamp_grad_comp)
-print('boot camp grad with less than 3 years of professional coding expereince compensation\n', bootcamp_grad_three_years_exp_comp)
+print('\n')
+print('boot camp grad with less than 3 years of professional coding expereince compensation\n', result_bootcamp_grad_three_years_less_exp_comp)
+print('\n')
+print('boot camp grad with more than 3 years of professional coding expereince compensation\n', result_bootcamp_grad_three_years_more_exp_comp)
 ```
 
     boot camp grad compensation
      EduOther
     Participated in a full-time developer training program or bootcamp    84375.0
     Name: ConvertedComp, dtype: float64
+    
+    
     boot camp grad with less than 3 years of professional coding expereince compensation
+     EduOther
+    Participated in a full-time developer training program or bootcamp    80000.0
+    Name: ConvertedComp, dtype: float64
+    
+    
+    boot camp grad with more than 3 years of professional coding expereince compensation
      EduOther
     Participated in a full-time developer training program or bootcamp    91500.0
     Name: ConvertedComp, dtype: float64
-
-
-
-```python
-df['EduOther'].value_counts()
-```
-
-
-```python
-fig = px.scatter(df, x="EduOther", y='ConvertedComp')
-fig.show()
-```
-
-
-```python
-fig = px.scatter(df, x="DevType", y='ConvertedComp')
-fig.show()
-```
-
-
-```python
-# age vs salary with education level
-
-import plotly.io as pio
-
-```
-
-# future work
-So initially, I thought comparing compensation between CS B.S. degree vs bootcamp graduates would work and the result was against my hypothesis. 
-
-CS degree is more attractive in terms of making money. 
-
-However I realized I cannot have simple comparison because I did not take time into the calcuation
-
-CS degree people would normally take 4 years to get started as a professional programmer. On the other hands, bootcamp graduate tend to get a job within a year, so I completely changed a condition. I gave a factor with 3 years of professional experience for bootcamp graudate. (<3 years, but I will have to do = 3 years)
-
-so Here are my steps
-
-1. CS degree vs bootcamp with no time factor
-2. CS degree vs bootcamp with 3 years or more
-3. CS degree with 2 years of exp vs bootcamp with 5 yeras of exp
 
